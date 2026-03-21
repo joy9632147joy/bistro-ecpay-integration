@@ -1,6 +1,5 @@
 package com.joy.holin.config;
 
-import com.joy.holin.filter.JwtAuthFilter;
 import com.joy.holin.repo.MembersRepo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +15,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.Customizer;
 
 @Configuration
@@ -34,38 +32,17 @@ public class SecurityConfig {
                 return new BCryptPasswordEncoder();
         }
 
-        // AuthenticationManager beans to support dual login
-        @Bean
-        public AuthenticationManager authenticationManager(
-                        PasswordEncoder passwordEncoder,
-                        UserDetailsService customerUserDetailsService,
-                        UserDetailsService employeeUserDetailsService) {
-
-                DaoAuthenticationProvider customerProvider = new DaoAuthenticationProvider(customerUserDetailsService);
-                customerProvider.setPasswordEncoder(passwordEncoder);
-
-                DaoAuthenticationProvider employeeProvider = new DaoAuthenticationProvider(employeeUserDetailsService);
-                employeeProvider.setPasswordEncoder(passwordEncoder);
-
-                return new ProviderManager(customerProvider, employeeProvider);
-        }
-
         @Bean
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http
                                 .cors(Customizer.withDefaults()) // 啟用 CORS
                                 .csrf(csrf -> csrf.disable()) // Disable CSRF for API usage
-                                .addFilterBefore(new JwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/api/manager/**").hasAnyRole("MANAGER")
-                                                .requestMatchers("/api/staff/**").hasAnyRole("MANAGER", "STAFF")
                                                 .requestMatchers("/api/customer/forgot-password").permitAll() // 忘記密碼/重設密碼都用他
+                                                .requestMatchers("/api/customer/register").permitAll() // 開放註冊
                                                 .requestMatchers("/api/customer/login").permitAll() // 開放客戶登入 API
                                                 .requestMatchers("/api/customer/verify-reset-token").permitAll()
                                                 .requestMatchers("/api/customer/reset-password").permitAll()
-                                                .requestMatchers("/api/employee/login").permitAll() // 開放員工登入 API
-                                                .requestMatchers("/api/employee/logout").permitAll() // 開放員工登出 API
-                                                .requestMatchers("/api/employee/**").authenticated() // 其他員工路由需要 JWT 驗證
                                                 .requestMatchers("/api/customer/**").hasRole("CUSTOMER")
                                                 .anyRequest().permitAll());
                 // .httpBasic(Customizer.withDefaults()); // 可以移除 Basic Auth，改用 JWT

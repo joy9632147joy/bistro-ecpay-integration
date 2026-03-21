@@ -1,132 +1,418 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <title>登入 | HoLin53精釀餐館</title>
+    <link rel="icon" href="./mainpageimg/Holin53_Logo.png">
     <link rel="stylesheet" href="css/bootstrap.css">
-    <script src="js/bootstrap.bundle.js"></script>
+    <link rel="stylesheet" href="./HolinCss/HolinProject.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="js/bootstrap.bundle.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./ESCss/Login.css">
-    <script src="./ESJS/MainPage.js"></script>
+    <style>
+        /* ── Login Page Specific ── */
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    <title>Enterprise System</title>
-    
+        .login-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            /* 和首頁 video-container 背景色一致，未載入圖時的 fallback */
+            background-color: #0d1f23;
+        }
+
+        /* 背景圖層：疊一層暗色漸層讓表單更易閱讀 */
+        .login-main::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(135deg, rgba(13, 31, 35, 0.82) 0%, rgba(35, 55, 62, 0.70) 100%);
+            z-index: 1;
+        }
+
+        /* 裝飾性金色光暈 */
+        .login-main::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(197, 160, 89, 0.12) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* ── Card ── */
+        .login-card {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 440px;
+            background: rgba(18, 36, 41, 0.88);
+            border: 1px solid rgba(197, 160, 89, 0.35);
+            border-radius: 12px;
+            padding: 48px 44px 44px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow:
+                0 0 0 1px rgba(197, 160, 89, 0.08),
+                0 24px 60px rgba(0, 0, 0, 0.55);
+            animation: fadeUp 0.6s ease both;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Logo + 標題 */
+        .login-logo {
+            width: 56px;
+            margin-bottom: 6px;
+        }
+
+        .login-brand-title {
+            font-family: 'Noto Serif TC', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: .06em;
+        }
+
+        .login-brand-sub {
+            font-size: 0.78rem;
+            color: #C5A059;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            margin-bottom: 32px;
+        }
+
+        /* 分隔線 */
+        .login-divider {
+            border-color: rgba(197, 160, 89, 0.25);
+            margin-bottom: 28px;
+        }
+
+        /* 標籤 */
+        .login-card .form-label {
+            font-size: 0.82rem;
+            color: #b0bec5;
+            letter-spacing: .05em;
+            margin-bottom: 6px;
+        }
+
+        /* Input */
+        .login-card .form-control {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            border-radius: 6px;
+            color: #f0ebe0;
+            font-size: 0.95rem;
+            padding: 10px 14px;
+            transition: border-color .25s, box-shadow .25s;
+        }
+
+        .login-card .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+        }
+
+        .login-card .form-control:focus {
+            background: rgba(255, 255, 255, 0.09);
+            border-color: #C5A059;
+            box-shadow: 0 0 0 3px rgba(197, 160, 89, 0.15);
+            color: #f0ebe0;
+            outline: none;
+        }
+
+        /* 密碼眼睛 toggle */
+        .input-group .btn-eye {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            border-left: none;
+            color: #8a9ea5;
+            border-radius: 0 6px 6px 0;
+            transition: color .2s;
+        }
+
+        .input-group .btn-eye:hover {
+            color: #C5A059;
+        }
+
+        .input-group .form-control {
+            border-radius: 6px 0 0 6px;
+        }
+
+        /* 登入按鈕 */
+        .btn-login {
+            width: 100%;
+            padding: 11px;
+            background: linear-gradient(135deg, #C5A059 0%, #a07a3a 100%);
+            border: none;
+            border-radius: 6px;
+            color: #1a1a1a;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: .08em;
+            font-family: 'Noto Serif TC', serif;
+            transition: filter .25s, transform .15s;
+            margin-top: 8px;
+        }
+
+        .btn-login:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        /* 次要連結 */
+        .login-links {
+            font-size: 0.82rem;
+            color: #7a8e95;
+            margin-top: 20px;
+        }
+
+        .login-links a {
+            color: #C5A059;
+            text-decoration: none;
+            transition: opacity .2s;
+        }
+
+        .login-links a:hover {
+            opacity: .75;
+            text-decoration: underline;
+        }
+
+        /* 錯誤訊息 */
+        .login-error {
+            display: none;
+            font-size: 0.82rem;
+            color: #ef9a9a;
+            margin-top: 6px;
+        }
+
+        /* navbar 補 padding-top，避免被 fixed navbar 擋住（登入頁不需要，但保留結構） */
+        /* 登入頁 main 直接 100vh 所以不用 */
+    </style>
 </head>
-
 
 <body>
 
-    <section class="py-1">
-        <div class="container">
-            <div class="row justify-content-center align-items-center min-vh-100">
-
-                <div class="col-11 col-md-5 login-box bg-white p-5 shadow">
-
-                    <div class="mb-4 text-center">
-                        <h3 class="fw-bold mb-2 text-dark">登入系統</h3>
-                        <p class="text-secondary small">Welcome back! Please enter your details.</p>
-                    </div>
-
-                    <form action="main_page.html">
-                        <div class="row g-4">
-
-                            <div class="col-12">
-                                <label for="employeeId" class="small fw-bold text-secondary mb-2">員工編號</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="bi bi-card-text"></i></span>
-                                    <input type="text" id="employeeId" name="employeeId" class="form-control"
-                                        placeholder="請輸入員工編號" required style="border-radius: 0 12px 12px 0 !important;">
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <label for="password" class="small fw-bold text-secondary mb-2">密碼</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
-                                    <input type="password" id="password" name="password"
-                                        class="form-control border-end-0" placeholder="請輸入密碼" required
-                                        style="border-radius: 0 !important;">
-                                    <button class="btn border" type="button" id="togglePassword"
-                                        style="border-radius: 0 12px 12px 0 !important; border-left: none;">
-                                        <i class="bi bi-eye-slash" id="eyeIcon"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div class="col-12 d-flex justify-content-between align-items-center">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="rememberMe">
-                                    <label class="form-check-label text-secondary small" for="rememberMe">記住我</label>
-                                </div>
-                                <a href="#" class="text-decoration-none small fw-bold"
-                                    onclick="alert('請洽管理員'); return false;">忘記密碼?</a>
-                            </div>
-
-                            <div class="col-12 mt-4">
-                                <button type="submit" id="submitBtn"
-                                    class="btn btn-primary w-100 fw-bold btn-login">登入</button>
-                            </div>
-
-                        </div>
-                    </form>
-                </div>
-
+    <!-- ── 導覽列（完全同主頁） ── -->
+    <nav class="navbar navbar-expand-lg navbar-dark navBarbackcolor fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="HolinProject.html">
+                <img src="./mainpageimg/Holin53_Logo_BG.png" class="weblogo">53
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTopic">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTopic">
+                <ul class="navBar mx-auto">
+                    <li><a href="HolinProject_About.html">關於Holin</a></li>
+                    <li><a href="HolinProject_Products.html">精釀與瓶裝酒</a></li>
+                    <li><a href="HolinProject_Menu.html">小食菜單</a></li>
+                    <li><a href="HolinProject_News.html">活動資訊</a></li>
+                    <li><a href="HolinProject_ReservationAndContact.html">訂位與聯絡</a></li>
+                    <li class="nav-item">
+                        <a href="https://www.instagram.com/holin.53/" target="_blank">
+                            <i class="bi bi-instagram" style="font-size: 1.2rem;"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="https://www.facebook.com/holin.holin53?locale=zh_TW" target="_blank">
+                            <i class="bi bi-facebook" style="font-size: 1.2rem;"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="https://lin.ee/Bhou0cv" target="_blank">
+                            <i class="bi bi-line" style="font-size: 1.2rem;"></i>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
+    </nav>
+
+
+    <!-- ── 主體：100vh 登入區 ── -->
+    <main class="login-main login-wrapper">
+
+        <!-- 背景圖（和首頁 video 同路徑，純裝飾） -->
+        <img src="./mainpageimg/關於店內3.jpg" alt="" aria-hidden="true"
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:.35;">
+
+        <div class="login-card">
+
+            <!-- Logo -->
+            <div class="text-center">
+                <img src="./mainpageimg/Holin53_Logo_BG.png" alt="Holin53 Logo" class="login-logo">
+                <div class="login-brand-title">HoLin53</div>
+                <div class="login-brand-sub">Craft Beer &amp; Bistro</div>
+            </div>
+
+            <hr class="login-divider">
+
+            <!-- 登入表單 -->
+            <div id="loginForm">
+
+                <div class="mb-3">
+                    <label for="loginEmail" class="form-label">電子信箱</label>
+                    <input type="email" class="form-control" id="loginEmail" placeholder="your@email.com"
+                        autocomplete="email">
+                    <div class="login-error" id="emailError">請輸入有效的電子信箱</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="loginPwd" class="form-label">密碼</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="loginPwd" placeholder="••••••••"
+                            autocomplete="current-password">
+                        <button class="btn-eye" type="button" id="togglePwd" tabindex="-1">
+                            <i class="bi bi-eye" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                    <div class="login-error" id="pwdError">請輸入密碼</div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-1" style="font-size:.82rem;">
+                    <div class="form-check mb-0">
+                        <input class="form-check-input" type="checkbox" id="rememberMe">
+                        <label class="form-check-label" for="rememberMe" style="color:#7a8e95;">記住我</label>
+                    </div>
+                    <a href="#" style="color:#C5A059;text-decoration:none;font-size:.82rem;">忘記密碼？</a>
+                </div>
+
+                <button class="btn-login" type="button" id="loginBtn">登　入</button>
+
+                <div class="login-links text-center">
+                    還沒有帳號？<a href="HolinProject_Register.html">立即註冊</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+    <!-- ── Footer（完全同主頁） ── -->
+    <section>
+        <footer class="main-footer py-5">
+            <div class="container">
+                <div class="row align-items-center gy-4">
+
+                    <div class="col-12 col-md-4 text-center text-md-start">
+                        <a href="HolinProject.html">
+                            <img src="./mainpageimg/Holin53_Logo_BG.png" alt="Logo" class="footer-logo">
+                        </a>
+                    </div>
+
+                    <div class="col-12 col-md-4 text-center text-md-center">
+                        <ul class="list-unstyled text-secondary footer-contact-list">
+                            <li class="mb-2">
+                                <i class="bi bi-geo-alt-fill me-2"></i>臺中市大雅區中清北街53號
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-telephone-fill me-2"></i>0917-407-408
+                            </li>
+                            <li class="mb-0">
+                                <i class="bi bi-clock-fill me-2"></i>週一~週六 18:00 - 23:00
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-12 col-md-4 text-center">
+                        <div class="social-icons-group">
+                            <a href="https://www.facebook.com/holin.holin53?locale=zh_TW" target="_blank">
+                                <i class="bi bi-facebook mb-0"></i>
+                            </a>
+                            <a href="https://www.instagram.com/holin.53/" target="_blank">
+                                <i class="bi bi-instagram mb-0"></i>
+                            </a>
+                            <a href="https://lin.ee/Bhou0cv" target="_blank">
+                                <i class="bi bi-line mb-0"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+                <hr class="border-secondary my-4">
+            </div>
+        </footer>
     </section>
+
+    <div class="footer-warning fixed-bottom text-center py-3 fw-bold">
+        禁止酒駕 🚫 未滿十八歲 禁止飲酒
+    </div>
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const toggleBtn = document.getElementById('togglePassword');
-            const passwordField = document.getElementById('password');
-            const eyeIcon = document.getElementById('eyeIcon');
-
-            toggleBtn.addEventListener('click', function () {
-
-                if (passwordField.type === 'password') {
-                    passwordField.type = 'text';
-
-                    eyeIcon.classList.remove('bi-eye-slash');
-                    eyeIcon.classList.add('bi-eye');
-                } else {
-                    passwordField.type = 'password';
-
-                    eyeIcon.classList.remove('bi-eye');
-                    eyeIcon.classList.add('bi-eye-slash');
-                }
-            });
-        });
-
-
-        // 模擬登入
-        const mockUsers = {
-            "A001": { password: "123456", role: "admin" },
-            "S001": { password: "123456", role: "staff" }
-        };
-
-        document.querySelector("form").addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            const id = document.getElementById("employeeId").value;
-            const pw = document.getElementById("password").value;
-            const user = mockUsers[id];
-
-            if (user && user.password === pw) {
-                sessionStorage.setItem("userRole", user.role); // 存入 role
-                window.location.href = "HolinProject.html"; // 跳轉
+        // 顯示/隱藏密碼
+        document.getElementById('togglePwd').addEventListener('click', function () {
+            const pwd = document.getElementById('loginPwd');
+            const icon = document.getElementById('eyeIcon');
+            if (pwd.type === 'password') {
+                pwd.type = 'text';
+                icon.className = 'bi bi-eye-slash';
             } else {
-                alert("帳號或密碼錯誤");
+                pwd.type = 'password';
+                icon.className = 'bi bi-eye';
             }
         });
 
+        // 簡易前端驗證（正式串 API 時替換這段）
+        document.getElementById('loginBtn').addEventListener('click', function () {
+            const email = document.getElementById('loginEmail').value.trim();
+            const pwd = document.getElementById('loginPwd').value;
+            let valid = true;
 
+            // reset
+            document.getElementById('emailError').style.display = 'none';
+            document.getElementById('pwdError').style.display = 'none';
+
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                document.getElementById('emailError').style.display = 'block';
+                valid = false;
+            }
+            if (!pwd) {
+                document.getElementById('pwdError').style.display = 'block';
+                valid = false;
+            }
+
+            if (valid) {
+                // TODO: 呼叫後端 /api/members/login
+                console.log('submit', { email, pwd });
+            }
+        });
+
+        // Enter 鍵觸發登入
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') document.getElementById('loginBtn').click();
+        });
     </script>
 
 </body>
-
 
 </html>

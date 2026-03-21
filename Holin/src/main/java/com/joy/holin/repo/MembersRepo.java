@@ -9,4 +9,6 @@ import com.joy.holin.entity.Members;
 public interface MembersRepo extends JpaRepository<Members, Long> {
 
 	Optional<Members> findByEmail(String email);
+
+	boolean existsByEmail(String email);
 }
