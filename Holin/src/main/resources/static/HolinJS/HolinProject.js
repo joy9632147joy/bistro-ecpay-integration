@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // 點擊「否」
     btnNo.addEventListener("click", function () {
         alert("本網站內容僅供 18 歲以上人士瀏覽！");
-        window.location.href = "https://maps.app.goo.gl/YMkfuPDTutvSJMuFA"; 
+        window.location.href = "https://maps.app.goo.gl/YMkfuPDTutvSJMuFA";
     });
 });
 
@@ -29,9 +29,9 @@ document.addEventListener("DOMContentLoaded", function () {
 window.addEventListener('scroll', function () {
     let navbar = document.querySelector('.navbar');
     if (window.scrollY > 200) {
-        navbar.classList.add('scrolled'); 
+        navbar.classList.add('scrolled');
     } else {
-        navbar.classList.remove('scrolled'); 
+        navbar.classList.remove('scrolled');
     }
 });
 
