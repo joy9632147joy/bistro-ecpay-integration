@@ -1,7 +1,7 @@
-# Holin Bistro - 購物車與綠界金流串接demo
+# Holin Bistro - 購物車與綠界金流串接
 
 ### 專案介紹
-這是一個模擬精釀餐酒館（Holin Bistro）線上周邊商品販售的 Side Project。
+這是一個精釀餐酒館（Holin Bistro）線上周邊商品販售的 Side Project。
 本專案為**技術練習作品**，主要目的在於實作完整的「電商購物車邏輯」，並練習將 **Spring Boot 後端**、**JWT 資安驗證** 以及 **第三方支付（綠界科技 ECPay）** 進行實際的 API 串接與整合。
 
 ### 核心技術 (Tech Stack)
