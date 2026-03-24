@@ -85,7 +85,9 @@
  }
 
  nav.navbar.scrolled {
-     background-color: rgba(35, 55, 62, 0.95);
+     background: linear-gradient(180deg, rgba(18, 30, 34, 0.97) 0%, rgba(30, 48, 55, 0.95) 100%);
+     border-bottom: 1px solid rgba(197, 160, 89, 0.25);
+     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
      transition: background-color 1.5s ease;
  }
 
@@ -147,6 +149,22 @@
  }
 
 
+ /* ===== 選單絕對置中 ===== */
+ @media (min-width: 992px) {
+     .nav-center-absolute {
+         position: absolute;
+         left: 50%;
+         transform: translateX(-50%);
+     }
+ }
+
+ /* 手機版恢復正常排列 */
+ @media (max-width: 991px) {
+     .nav-center-absolute {
+         position: static;
+         transform: none;
+     }
+ }
 
 
  /* --- RWD 直 --- */
@@ -171,6 +189,7 @@
      ul.navBar li a {
          padding: 10px 0;
      }
+
 
  }
 

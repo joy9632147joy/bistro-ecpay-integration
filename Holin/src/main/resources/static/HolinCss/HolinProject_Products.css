@@ -79,6 +79,23 @@ ul.navBar li a {
     transform: translateY(-2px);
 }
 
+/* ===== 選單絕對置中 ===== */
+@media (min-width: 992px) {
+    .nav-center-absolute {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* 手機版恢復正常排列 */
+@media (max-width: 991px) {
+    .nav-center-absolute {
+        position: static;
+        transform: none;
+    }
+}
+
 /* ----- RWD ----- */
 @media (max-width: 991px) {
 

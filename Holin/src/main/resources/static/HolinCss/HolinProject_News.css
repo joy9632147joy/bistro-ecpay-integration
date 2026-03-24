@@ -66,6 +66,22 @@ ul.navBar li a {
     padding: 20px;
 }
 
+/* ===== 選單絕對置中 ===== */
+@media (min-width: 992px) {
+    .nav-center-absolute {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* 手機版恢復正常排列 */
+@media (max-width: 991px) {
+    .nav-center-absolute {
+        position: static;
+        transform: none;
+    }
+}
 
 
 /* --- RWD 手機版微調 --- */
@@ -401,28 +417,28 @@ html {
 
 
 /* 至頂箭頭 */
- #myBtn {
-     opacity: 0;
-     pointer-events: none;
-     position: fixed;
-     bottom: 80px;
-     right: 30px;
-     z-index: 99;
-     border: none;
-     background-color: rgba(35, 55, 62, 0.95);
-     color: #ebe0cc;
-     padding: 15px;
-     border-radius: 10px;
-     font-size: 18px;
- }
+#myBtn {
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    bottom: 80px;
+    right: 30px;
+    z-index: 99;
+    border: none;
+    background-color: rgba(35, 55, 62, 0.95);
+    color: #ebe0cc;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 18px;
+}
 
- #myBtn.visible {
+#myBtn.visible {
     opacity: 1;
     pointer-events: auto;
 }
 
- #myBtn:hover {
-     background-color: #555;
-     cursor: pointer;
-     transform: scale(1.1);
- }
+#myBtn:hover {
+    background-color: #555;
+    cursor: pointer;
+    transform: scale(1.1);
+}

@@ -291,6 +291,23 @@ ul.navBar li.nav-item a:hover {
     }
 }
 
+/* ===== 選單絕對置中 ===== */
+@media (min-width: 992px) {
+    .nav-center-absolute {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+/* 手機版恢復正常排列 */
+@media (max-width: 991px) {
+    .nav-center-absolute {
+        position: static;
+        transform: none;
+    }
+}
+
 
 /* ===== Hero 影片區 ===== */
 .video-container {
